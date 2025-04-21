@@ -48,7 +48,7 @@ router.post("/signup", async (req, res) => {
     })
 })
 const signinBody = zod.object({
-    username: zod.string().email(),
+    email: zod.string().email(),
     password: zod.string()
 })
 
@@ -99,6 +99,30 @@ router.put("/", authMiddleware, async (req, res) => {
     await User.updateOne({ _id: req.userId }, req.body)
     res.json({
         msg: "Updated Successfully"
+    })
+})
+
+router.get("/bulk", async (req, res) => {
+    const filter = req.query.filter || "";
+
+    const users = await User.find({
+        $or: [{
+            firstName: {
+                "$regex": filter
+            }
+        }, {
+            lastName: {
+                "$regex": filter
+            }
+        }]
+    })
+    res.json({
+        user: users.map(user => ({
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            _id: user._id
+        }))
     })
 })
 module.exports = router;

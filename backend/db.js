@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 mongoose.connect("MONGO_URL");
 
 const userSchema = new mongoose.Schema({
-    username: {
+    email: {
         type: String,
         required: true,
         unique: true,
