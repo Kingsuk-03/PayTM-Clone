@@ -1,1 +1,1 @@
-# This a PayTM Clone.
+# PayTM Clone.
