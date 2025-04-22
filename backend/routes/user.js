@@ -3,10 +3,12 @@ const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
 const zod = require("zod");
 const { Router } = require("express");
-const { User } = require("../db");
+const { User, Account } = require("../db");
 const { authMiddleware } = require("../middleware");
 const router = Router();
 
+
+// Signup--------------------------
 const signupBody = zod.object({
     email: zod.string().email(),
     firstName: zod.string(),
@@ -38,6 +40,14 @@ router.post("/signup", async (req, res) => {
     })
     const userId = user._id;
 
+    // ----- Create new account with a random balance -----
+
+    await Account.create({
+        userId: userId,
+        balance: 1 + Math.random() * 10000
+    })
+
+    //-----------------------------------------------------
     const token = jwt.sign({
         userId
     }, JWT_SECRET)
@@ -47,6 +57,8 @@ router.post("/signup", async (req, res) => {
         token: token
     })
 })
+
+// Signin--------------------------
 const signinBody = zod.object({
     email: zod.string().email(),
     password: zod.string()
@@ -88,6 +100,7 @@ const updateBody = zod.object({
     password: zod.string(),
 })
 
+// Update--------------------------
 router.put("/", authMiddleware, async (req, res) => {
     const { success } = updateBody.safeParse(req.body)
     if (!success) {
@@ -102,6 +115,7 @@ router.put("/", authMiddleware, async (req, res) => {
     })
 })
 
+// Filter--------------------------
 router.get("/bulk", async (req, res) => {
     const filter = req.query.filter || "";
 
