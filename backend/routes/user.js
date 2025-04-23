@@ -52,7 +52,7 @@ router.post("/signup", async (req, res) => {
         userId
     }, JWT_SECRET)
 
-    res.json({
+    res.status(200).json({
         msg: "User created Successfully",
         token: token
     })
@@ -68,7 +68,7 @@ router.post("/signin", async (req, res) => {
     const { success } = signinBody.safeParse(req.body)
     if (!success) {
         return res.status(411).json({
-            message: "Email already taken / Incorrect inputs"
+            message: "Incorrect inputs"
         })
     }
 
@@ -82,7 +82,7 @@ router.post("/signin", async (req, res) => {
             userId: user._id
         }, JWT_SECRET);
 
-        res.json({
+        res.status(200).json({
             token: token
         })
         return;
@@ -116,17 +116,20 @@ router.put("/", authMiddleware, async (req, res) => {
 })
 
 // Filter--------------------------
-router.get("/bulk", async (req, res) => {
+router.get("/bulk", authMiddleware, async (req, res) => {
     const filter = req.query.filter || "";
 
     const users = await User.find({
+        _id: { $ne: req.userId },
         $or: [{
             firstName: {
-                "$regex": filter
+                "$regex": filter,
+                "$options": "i"
             }
         }, {
             lastName: {
-                "$regex": filter
+                "$regex": filter,
+                "$options": "i"
             }
         }]
     })
