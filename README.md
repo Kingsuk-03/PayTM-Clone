@@ -56,8 +56,8 @@ npm install
 
 <!-- Side-by-side Preview Images -->
 <p align="center">
-  <img src="./Previews/Signup.png" alt="Preview 2" width="336"/>
-  <img src="./Previews/Signin.png" alt="Preview 3" width="335"/>
-  <img src="./Previews/SendMonay.png" alt="Preview 4" width="330"/>
+  <img src="./Previews/Signup.png" alt="Preview 2" width="315"/>
+  <img src="./Previews/Signin.png" alt="Preview 3" width="315"/>
+  <img src="./Previews/SendMonay.png" alt="Preview 4" width="315"/>
 </p>
 
